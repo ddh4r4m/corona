@@ -30,7 +30,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Container(
-      color: Colors.black12,
+          color: Colors.white,
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(top: 10),
@@ -41,20 +41,20 @@ class MainPage extends StatelessWidget {
             enableInfiniteScroll: true,
             autoPlay: true,
             pauseAutoPlayOnTouch: Duration(seconds: 5),
-            height: 200.0,
+            height: 160.0,
             items: imgList.map((imgUrl) {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    margin: EdgeInsets.symmetric(horizontal: 4.0),
                     decoration: BoxDecoration(
-//                          color: Colors.black12
+                        color: Colors.blueAccent
                         ),
                     child: Image.network(
                       imgUrl,
-                      fit: BoxFit.contain,
-                      width: 600,
+                      fit: BoxFit.cover,
+//                      width: 600,
                     ),
                   );
                 },
@@ -90,6 +90,17 @@ class MainPage extends StatelessWidget {
 //          width: 60,
 //          height: 130,
           decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.blue,
+                blurRadius: 15.0, // soften the shadow
+                spreadRadius: 1.0, //extend the shadow
+                offset: Offset(
+                  3.0, // Move to right 10  horizontally
+                  3.0, // Move to bottom 10 Vertically
+                ),
+              )
+            ],
             borderRadius: BorderRadius.circular(10.0),
             color: Colors.red,
             gradient: new LinearGradient(

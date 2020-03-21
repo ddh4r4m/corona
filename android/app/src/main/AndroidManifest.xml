@@ -9,6 +9,12 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="corona"
         android:icon="@mipmap/ic_launcher">
+
+
+        <!-- Add the following entry, with your API key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBQaiGh0QgN9_MC6fQ_OowEdTqhgj3iIAs" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
