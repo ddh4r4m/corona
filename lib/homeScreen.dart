@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return _otherPage;
         break;
       case 4:
-        return _gMapPage;
+        return GMap();
         break;
       default:
         return new Container(
@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           });
         },
-      ), floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      ), floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 

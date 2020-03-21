@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:corona/homeScreen.dart';
 //void main() => runApp(GMap());
 
 class GMap extends StatefulWidget {
@@ -17,7 +17,7 @@ class GMap extends StatefulWidget {
 class _GMapState extends State<GMap> {
   GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(28.7041, 77.1025);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -32,8 +32,8 @@ class _GMapState extends State<GMap> {
         child: MaterialApp(
           home: Scaffold(
             appBar: AppBar(
-              title: Text('Maps Sample App'),
-              backgroundColor: Colors.green[700],
+              title: Text('Victim History'),
+              backgroundColor: Colors.blue[700],
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
@@ -54,5 +54,8 @@ class _GMapState extends State<GMap> {
 
   void moveToLastScreen() {
     Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return HomeScreen();
+    }));
   }
 }
