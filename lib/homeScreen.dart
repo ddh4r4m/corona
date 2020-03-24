@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //Create all the Pages
   final OtherPage _otherPage = OtherPage();
   final MainPage _mainPage = MainPage();
-  final GMap _gMapPage = GMap();
+  // final GMap _gMapPage = GMap();
 
   Widget _showPage = new MainPage();
 

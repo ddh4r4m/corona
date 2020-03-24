@@ -80,10 +80,10 @@ class MainPage extends StatelessWidget {
     ));
   }
 
-  Widget _buildCard(String name, double top_pad, double bottom_pad) {
+  Widget _buildCard(String name, double topPad, double bottomPad) {
     return Padding(
       padding:
-          EdgeInsets.only(top: top_pad, bottom: bottom_pad, left: 5, right: 5),
+          EdgeInsets.only(top: topPad, bottom: bottomPad, left: 5, right: 5),
       child: InkWell(
         onTap: () {},
         child: Container(
