@@ -3,9 +3,15 @@
 <plist version="1.0">
 <dict>
      <!-- Add the following entry, from here, -->
-     <key>io.flutter.embedded_views_preview</key>
-     <true/>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
      <!-- to here. -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app needs access to location when in the background.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open and in the background.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

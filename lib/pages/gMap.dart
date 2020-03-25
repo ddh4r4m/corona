@@ -1,5 +1,6 @@
 import 'dart:collection';
-
+import 'package:geolocator/geolocator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:corona/homeScreen.dart';
@@ -17,23 +18,66 @@ class GMap extends StatefulWidget {
 }
 
 class _GMapState extends State<GMap> {
+  Stream<QuerySnapshot> _myMarkers;
   Set<Marker> _markers = HashSet<Marker>();
   Set<Circle> _circles = HashSet<Circle>();
-  Set<Polygon> _polygons = HashSet<Polygon>();
+//  Set<Polygon> _polygons = HashSet<Polygon>();
   GoogleMapController mapController;
-  BitmapDescriptor _markerIcon;
+//  BitmapDescriptor _markerIcon;
+
+  var clients = [];
+  var currentLocation;
+
+
+  bool mapToggle = false;
+  bool clientsToggle = false;
+
 
   @override
   void initState() {
     // implement initState
     super.initState();
     _setCircles();
+    _myMarkers = Firestore.instance.collection('markers').snapshots();
+    print(_myMarkers);
+    Geolocator().getCurrentPosition().then((currloc) {
+      setState(() {
+        currentLocation = currloc;
+        mapToggle = true;
+        populateClients();
+      });
+    });
   }
+
+  populateClients() {
+    clients = [];
+    Firestore.instance.collection('markers').getDocuments().then((docs) {
+      if (docs.documents.isNotEmpty) {
+        setState(() {
+          clientsToggle = true;
+        });
+        for (int i = 0; i < docs.documents.length; ++i) {
+          clients.add(docs.documents[i].data);
+//          initMarker(docs.documents[i].data);
+        }
+      }
+    });
+  }
+//
+//  initMarker(client) {
+//    mapController.clearMarkers().then((val) {
+//      mapController.addMarker(MarkerOptions(
+//          position:
+//          LatLng(client['location'].latitude, client['location'].longitude),
+//          draggable: false,
+//          infoWindowText: InfoWindowText(client['clientName'], 'Nice')));
+//    });
+//  }
 
 //  void _setMarkerIcon() async{
 //    _markerIcon = await BitmapDescriptor.fr
 //  }
-  final LatLng _center = const LatLng(28.7041, 77.1025);
+  final LatLng _center = const LatLng(28.8041, 77.1025);
   void _setCircles(){
     _circles.add(Circle(
         circleId: CircleId("0"),
@@ -45,9 +89,8 @@ class _GMapState extends State<GMap> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-
     setState(() {
+      mapController = controller;
       _markers.add(
         Marker(
           //Fetch this from api make sure unique
@@ -58,6 +101,22 @@ class _GMapState extends State<GMap> {
         )
       );
     });
+  }
+
+  Future<void> addMyLocation() async{
+    final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    //This Update Method needs to be more secure
+    Firestore.instance.collection('markers').add({"address":"New Address","location":GeoPoint(position.latitude,position.longitude),"name":"D","placeId":"DDDff2"}).catchError((e){
+      print(e);
+    });
+  }
+
+  void _getCurrentLocation() async{
+    //it'll contain both latitudes and longitudes
+    final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(position);
+    addMyLocation();
+//    return position;
   }
 
   @override
@@ -78,28 +137,77 @@ class _GMapState extends State<GMap> {
                 },
               ),
             ),
-            body: Stack(
-              children: <Widget>[
-                GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  initialCameraPosition: CameraPosition(
-                    target: _center,
-                    zoom: 11.0,
-                  ),
-                  markers: _markers,
-                  circles: _circles,
-                ),
-                Container(
-                  alignment: Alignment.bottomCenter
-                  ,padding: EdgeInsets.fromLTRB(0, 0, 0, 32),
-                  child: Text("Victims Around the Globe"),
-                )
-              ],
+            body: StreamBuilder<QuerySnapshot>(
+              stream: Firestore.instance.collection('markers').snapshots(),//_myMarkers,
+              builder: (context, snapshot){
+                if(snapshot.hasError){
+                  return Center(child: Text('Error: ${snapshot.error}'),);
+                }
+                if(!snapshot.hasData){
+                  return Center(child: const Text('Loading...Bro'),);
+                }
+//                return victimsMap(documents: snapshot.data.documents,);
+                return Column(
+                  children: <Widget>[
+                    Flexible(
+                      flex: 1,
+                      child: victimsMap(
+                        documents: snapshot.data.documents,
+                        initialPosition: _center,
+                      ),
+                    )
+                  ],
+
+                );
+                final mapData = snapshot.data.documents;
+              },
             ),
+              floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.location_searching),
+                onPressed: (){
+                _getCurrentLocation();
+              },
+            ),
+
+            //Stack(
+//              children: <Widget>[
+//                GoogleMap(
+//                  onMapCreated: _onMapCreated,
+//                  initialCameraPosition: CameraPosition(
+//                    target: _center,
+//                    zoom: 11.0,
+//
+//                  ),
+//                  markers: _markers,
+//                  circles: _circles,
+//                ),
+//                Container(
+//                  alignment: Alignment.bottomCenter
+//                  ,padding: EdgeInsets.fromLTRB(0, 0, 0, 32),
+//                  child: Text("Victims Around the Globe"),
+//                ),
+//
+//              ],
+//            ),
+//            floatingActionButton: FloatingActionButton(
+//              child: Icon(Icons.location_searching),
+//              onPressed: (){
+//                _getCurrentLocation();
+//              },
+//            ),
           ),
         ));
   }
 
+//  _addMarker() {
+//    var marker = Marker(
+//        position: mapController.cameraPosition.target,
+//        icon: BitmapDescriptor.defaultMarker,
+//        infoWindowText: InfoWindowText('Magic Marker', '🍄🍄🍄')
+//    );
+//
+//    mapController.addMarker(marker);
+//  }
   void moveToLastScreen() {
     Navigator.pop(context);
     return null;
@@ -107,5 +215,49 @@ class _GMapState extends State<GMap> {
     //   return HomeScreen();
     // })
     // );
+  }
+}
+const _pinkHue = 220.0;
+class victimsMap extends StatelessWidget {
+
+  const victimsMap({
+    Key key,
+    @required this.documents,
+    @required this.initialPosition,
+}) : super(key: key);
+
+  final List<DocumentSnapshot> documents;
+  final LatLng initialPosition;
+
+  @override
+  Widget build(BuildContext context) {
+    return GoogleMap(
+//      onMapCreated: _onMapCreated,
+      initialCameraPosition: CameraPosition(
+        target: initialPosition,
+        zoom: 11.0,
+
+      ),
+      markers: documents.map((document)=>Marker(
+        markerId: MarkerId(document['placeId']),
+        icon: BitmapDescriptor.defaultMarkerWithHue(_pinkHue),
+        position: LatLng(
+          document['location'].latitude,
+          document['location'].longitude,
+        ),
+        infoWindow: InfoWindow(
+          title: document['name'],
+          snippet: document['address'],
+        )
+      )).toSet(),
+      circles: documents.map((document)=>Circle(
+          circleId: CircleId(document['placeId']),
+          center: LatLng(document['location'].latitude,
+            document['location'].longitude),
+          radius: 1000,
+          strokeWidth: 0,
+          fillColor: Color.fromRGBO(255, 94, 0, 0.5)
+      )).toSet(),
+    );
   }
 }
