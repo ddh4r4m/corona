@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:corona/pages/otherPage.dart';
 import 'package:corona/pages/mainPage.dart';
 import 'package:corona/pages/gMap.dart';
-
+import 'package:corona/pages/faqPage.dart';
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => new _HomeScreenState();
@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //Create all the Pages
   final OtherPage _otherPage = OtherPage();
   final MainPage _mainPage = MainPage();
+  final faqPage _faqPage = faqPage();
   // final GMap _gMapPage = GMap();
 
   Widget _showPage = new MainPage();
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return _otherPage;
         break;
       case 1:
-        return _otherPage;
+        return _faqPage;
         break;
       case 2:
         return _mainPage;
