@@ -63,31 +63,59 @@ class _faqPageState extends State<faqPage > {
 //  }
 
 List<Item> _data = _buildFaq();//generateItems(8);
+//
 
-@override
-Widget build(BuildContext context) {
-  return Column(
-    children: <Widget>[
-      Container(
-        margin: EdgeInsets.only(top: 20),
-        padding: EdgeInsets.only(top: 10),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-          'FAQs',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.left,
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+                margin: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.all(10),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'FAQs',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.left,
                   ),
-      )),
-
-      SingleChildScrollView(
-        child: Container(
-          child: _buildPanel(),
-  ),
-  )
-    ],
-  );
-}
+                )),
+            _buildPanel()
+          ],
+        ),
+//        child: _buildPanel(),
+      ),
+    );
+  }
+//@override
+//Widget build(BuildContext context) {
+//  return Column(
+//    children: <Widget>[
+//      Expanded(
+//
+//
+//      child: Container(
+//        margin: EdgeInsets.only(top: 20),
+//        padding: EdgeInsets.only(top: 10),
+//        child: Align(
+//          alignment: Alignment.centerLeft,
+//          child: Text(
+//          'FAQs',
+//          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+//          textAlign: TextAlign.left,
+//                  ),
+//      ))),
+//
+//      SingleChildScrollView(
+//        child: Container(
+//          child: _buildPanel(),
+//  ),
+//  )
+//    ],
+//  );
+//}
 
 Widget _buildPanel() {
   return ExpansionPanelList(
@@ -100,25 +128,28 @@ Widget _buildPanel() {
       return ExpansionPanel(
         headerBuilder: (BuildContext context, bool isExpanded) {
           return ListTile(
-            title: Text(item.headerValue),
-            onTap: () {
-              setState(() {
-                item.isExpanded = !isExpanded;
-              });
-            },
+              title: Text(item.headerValue),
+              onTap: () {
+                setState(() {
+                  item.isExpanded = !isExpanded;
+                });
+              }
           );
         },
-        body:ListTile(
-                title: Text(item.expandedValue),
+        body:Container(
+            child:InkWell(
+              child:  ListTile(
+                  title: Text(item.expandedValue),
 //            subtitle: Text('To delete this panel, tap the trash can icon'),
 //            trailing: Icon(Icons.delete),
-                onTap: () {
-                  setState(() {
+                  onTap: () {
+                    setState(() {
 //                item.isExpanded = !isExpanded;
 //                _data.removeWhere((currentItem) => item == currentItem);
-                  });
-                }
-            ),
+                    });
+                  }
+              ),
+            )),
         isExpanded: item.isExpanded,
       );
     }).toList(),
