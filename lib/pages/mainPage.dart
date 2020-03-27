@@ -64,6 +64,17 @@ class MainPage extends StatelessWidget {
         return Container(
           margin: EdgeInsets.all(5.0),
           decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 4.0, // soften the shadow
+                spreadRadius: 0.5, //extend the shadow
+                offset: Offset(
+                  2.0, // Move to right 10  horizontally
+                  3.0, // Move to bottom 10 Vertically
+                ),
+              )
+            ],
               color: Colors.blueAccent,
                   borderRadius:  BorderRadius.all(Radius.circular(8.0)),
           ),

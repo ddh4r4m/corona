@@ -79,12 +79,12 @@ class _HomeScreenState extends State<HomeScreen> {
         items: <Widget>[
 
           Icon(
-            Icons.add,
+            Icons.account_circle,
             size: 20,
             color: Colors.indigo,
           ),
-          Icon(Icons.list, size: 20, color: Colors.indigo),
-          Icon(Icons.healing, size: 20, color: Colors.indigo),
+          Icon(Icons.question_answer, size: 20, color: Colors.indigo),
+          Icon(Icons.home, size: 20, color: Colors.indigo),
           Icon(Icons.compare_arrows, size: 20, color: Colors.indigo),
           Icon(Icons.map, size: 20, color: Colors.indigo)
         ],
