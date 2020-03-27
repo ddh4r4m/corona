@@ -1,89 +1,151 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
+final List<String> imgList = [
+  'https://ichef.bbci.co.uk/news/208/cpsprodpb/931B/production/_111195673_corona_whatyouneedtodo_without_title-nc.png',
+  'https://www.cdc.gov/coronavirus/2019-ncov/images/social/covid-19-symptoms-v03.png',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/safe-greetings.tmb-1920v.png?sfvrsn=2e97004e_1',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/handshaking.tmb-1920v.png?sfvrsn=4aed53c5_1',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/wearing-gloves.tmb-1920v.png?sfvrsn=ec69b46a_1',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-smart-if-you-develop.tmb-1920v.jpg?sfvrsn=1486258a_6',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-smart-inform.tmb-1920v.jpg?sfvrsn=f6dbe358_6',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-safe.tmb-1920v.jpg?sfvrsn=1f6e4aef_6',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-kind-to-support.tmb-1920v.jpg?sfvrsn=1856f2a3_7',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-kind-to-address-stigma.tmb-1920v.jpg?sfvrsn=4615bfbe_6',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-kind-to-address-fear.tmb-1920v.jpg?sfvrsn=a8e99f14_6',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/protect-yourself/blue-1.tmb-1920v.png?sfvrsn=3d15aa1c_1',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/protect-yourself/blue-2.tmb-1920v.png?sfvrsn=2bc43de1_1',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/protect-yourself/blue-3.tmb-1920v.png?sfvrsn=b1ef6d45_1',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/protect-yourself/blue-4.tmb-1920v.png?sfvrsn=a5317377_5',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/stay-healthy-while-travelling/1.tmb-1920v.png?sfvrsn=1a813eed_4',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/stay-healthy-while-travelling/2.tmb-1920v.png?sfvrsn=13250c49_4',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/stay-healthy-while-travelling/3.tmb-1920v.png?sfvrsn=5e5a641_4',
+  'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/stay-healthy-while-travelling/4.tmb-1920v.png?sfvrsn=9719c641_4'
+];
+
 
 class MainPage extends StatelessWidget {
-  final List<String> imgList = [
-    'https://ichef.bbci.co.uk/news/208/cpsprodpb/931B/production/_111195673_corona_whatyouneedtodo_without_title-nc.png',
-    'https://www.cdc.gov/coronavirus/2019-ncov/images/social/covid-19-symptoms-v03.png',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/safe-greetings.tmb-1920v.png?sfvrsn=2e97004e_1',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/handshaking.tmb-1920v.png?sfvrsn=4aed53c5_1',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/wearing-gloves.tmb-1920v.png?sfvrsn=ec69b46a_1',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-smart-if-you-develop.tmb-1920v.jpg?sfvrsn=1486258a_6',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-smart-inform.tmb-1920v.jpg?sfvrsn=f6dbe358_6',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-safe.tmb-1920v.jpg?sfvrsn=1f6e4aef_6',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-kind-to-support.tmb-1920v.jpg?sfvrsn=1856f2a3_7',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-kind-to-address-stigma.tmb-1920v.jpg?sfvrsn=4615bfbe_6',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/social-media-squares/be-kind-to-address-fear.tmb-1920v.jpg?sfvrsn=a8e99f14_6',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/protect-yourself/blue-1.tmb-1920v.png?sfvrsn=3d15aa1c_1',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/protect-yourself/blue-2.tmb-1920v.png?sfvrsn=2bc43de1_1',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/protect-yourself/blue-3.tmb-1920v.png?sfvrsn=b1ef6d45_1',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/protect-yourself/blue-4.tmb-1920v.png?sfvrsn=a5317377_5',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/stay-healthy-while-travelling/1.tmb-1920v.png?sfvrsn=1a813eed_4',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/stay-healthy-while-travelling/2.tmb-1920v.png?sfvrsn=13250c49_4',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/stay-healthy-while-travelling/3.tmb-1920v.png?sfvrsn=5e5a641_4',
-    'https://www.who.int/images/default-source/health-topics/coronavirus/risk-communications/general-public/stay-healthy-while-travelling/4.tmb-1920v.png?sfvrsn=9719c641_4'
-  ];
+
+
+  CarouselSlider getFullScreenCarousel(BuildContext mediaContext) {
+    return CarouselSlider(
+      autoPlay: true,
+      viewportFraction: 1.0,
+      aspectRatio: 2,
+      items: imgList.map(
+            (url) {
+          return Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(0.0)),
+              child: Image.network(
+                url,
+                fit: BoxFit.cover,
+                width: 1000.0,
+              ),
+            ),
+          );
+        },
+      ).toList(),
+    );
+  }
 
 //  final List<String> _myEvents = ["Health", "Precautions"];
+
+  final CarouselSlider autoPlayDemo = CarouselSlider(
+    viewportFraction: 0.9,
+    aspectRatio: 2.0,
+    autoPlay: true,
+    enlargeCenterPage: true,
+    autoPlayCurve: Curves.fastOutSlowIn,
+    pauseAutoPlayOnTouch: Duration(seconds: 2),
+    items: imgList.map(
+          (url) {
+        return Container(
+          margin: EdgeInsets.all(5.0),
+          decoration: BoxDecoration(
+              color: Colors.blueAccent,
+                  borderRadius:  BorderRadius.all(Radius.circular(8.0)),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            child: Image.network(
+              url,
+              fit: BoxFit.cover,
+              width: 1000.0,
+            ),
+          ),
+        );
+      },
+    ).toList(),
+  );
+
+
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Container(
           color: Colors.white,
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.only(top: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          CarouselSlider(
-            enableInfiniteScroll: true,
-            autoPlay: true,
-            pauseAutoPlayOnTouch: Duration(seconds: 5),
-            height: 160.0,
-            items: imgList.map((imgUrl) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                        color: Colors.blueAccent
-                        ),
-                    child: Image.network(
-                      imgUrl,
-                      fit: BoxFit.cover,
-//                      width: 600,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          padding: EdgeInsets.only(top: 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: Column(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Welcome', style: TextStyle(
+                          fontWeight: FontWeight.w900, fontSize: 42),
+                          textAlign: TextAlign.start),
                     ),
-                  );
-                },
-              );
-            }).toList(),
-          ),
-          Expanded(
-            child: GridView(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 5.0,
-                  mainAxisSpacing: 0.0),
-              children: <Widget>[
-                _buildCard("Precautions", 20, 25),
-                _buildCard("News", 20, 25),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(" Let's begin...", style: TextStyle(
+                          fontWeight: FontWeight.w300, fontSize: 12),
+                          textAlign: TextAlign.start),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 1.0),
+                  child: Column(children: [
+                    autoPlayDemo,
+                  ])),
+              Expanded(
+                child: GridView(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 5.0,
+                      mainAxisSpacing: 0.0),
+                  children: <Widget>[
+                    _buildCard("Precautions", 20, 25),
+                    _buildCard("News", 20, 25),
 //                      _buildCard("Symptoms",0,51),
 //                      _buildCard("More..",0,51)
-              ],
-            ),
-          )
-        ],
-      ),
-    ));
+                  ],
+                ),
+              )
+            ],
+          ),
+        ));
   }
 
   Widget _buildCard(String name, double topPad, double bottomPad) {
     return Padding(
       padding:
-          EdgeInsets.only(top: topPad, bottom: bottomPad, left: 5, right: 5),
+      EdgeInsets.only(top: topPad, bottom: bottomPad, left: 5, right: 5),
       child: InkWell(
         onTap: () {},
         child: Container(
