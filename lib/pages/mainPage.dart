@@ -1,6 +1,20 @@
 import 'package:carousel_slider/carousel_slider.dart';
+//import 'package:corona/pages/root_page.dart';
+//import 'package:corona/services/auth_service.dart';
+//import 'package:firebase_database/firebase_database.dart';
+//import 'package:corona/widget/provider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+//import 'dart:async';
+//import 'package:corona/services/authentication.dart';
+
+
+class MainPage extends StatefulWidget {
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
 
 final List<String> imgList = [
   'https://ichef.bbci.co.uk/news/208/cpsprodpb/931B/production/_111195673_corona_whatyouneedtodo_without_title-nc.png',
@@ -25,8 +39,33 @@ final List<String> imgList = [
 ];
 
 
-class MainPage extends StatelessWidget {
 
+class _MainPageState extends State<MainPage> {
+
+//
+//  @override
+//  void initState() {
+//    super.initState();
+//    widget.auth.getCurrentUser().then((user) {
+//      setState(() {
+//        if (user != null) {
+//          _userId = user?.uid;
+//        }
+//        authStatus =
+//        user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+//      });
+//    });
+//  }
+
+//  signOut() async {
+//    try {
+//      await widget.auth.signOut();
+//      widget.logoutCallback();
+//    } catch (e) {
+//      print(e);
+//    }
+//  }
+//
 
   CarouselSlider getFullScreenCarousel(BuildContext mediaContext) {
     return CarouselSlider(
@@ -114,11 +153,23 @@ class MainPage extends StatelessWidget {
                 padding: EdgeInsets.all(5),
                 child: Column(
                   children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Welcome', style: TextStyle(
-                          fontWeight: FontWeight.w900, fontSize: 42),
-                          textAlign: TextAlign.start),
+                    Row(
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('Welcome', style: TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 42),
+                              textAlign: TextAlign.start),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: new FlatButton(
+                            child: new Text('Logout',
+                                style: new TextStyle(fontSize: 17.0, color: Colors.indigo)),
+                          ),
+                        ),
+
+                      ],
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -126,6 +177,23 @@ class MainPage extends StatelessWidget {
                           fontWeight: FontWeight.w300, fontSize: 12),
                           textAlign: TextAlign.start),
                     ),
+//                    Align(
+//                      alignment: Alignment.centerRight,
+//                      child: IconButton(
+//                        icon: Icon(Icons.undo),
+//                        onPressed: () async{
+//                          try{
+//                            AuthService auth = Provider.of(context).auth;
+//                            await auth.signOut().then((_){
+//                              Navigator.of(context).pushNamedAndRemoveUntil("/LogIn", ModalRoute.withName("/HomeScreen"));
+//                            });
+//                            print("Signed Out");
+//                          }catch(e){
+//                            print(e);
+//                          }
+//                        },
+//                      ),
+//                    )
                   ],
                 ),
               ),
@@ -141,8 +209,8 @@ class MainPage extends StatelessWidget {
                       crossAxisSpacing: 5.0,
                       mainAxisSpacing: 0.0),
                   children: <Widget>[
-                    _buildCard("Precautions", 20, 25),
-                    _buildCard("News", 20, 25),
+                    _buildCard("FAQs", 20, 25,Icons.question_answer),
+                    _buildCard("News", 20, 25,Icons.speaker_notes),
 //                      _buildCard("Symptoms",0,51),
 //                      _buildCard("More..",0,51)
                   ],
@@ -152,8 +220,8 @@ class MainPage extends StatelessWidget {
           ),
         ));
   }
-
-  Widget _buildCard(String name, double topPad, double bottomPad) {
+//  String iconName = "save";
+  Widget _buildCard(String name, double topPad, double bottomPad, IconData iconName) {
     return Padding(
       padding:
       EdgeInsets.only(top: topPad, bottom: bottomPad, left: 5, right: 5),
@@ -191,7 +259,7 @@ class MainPage extends StatelessWidget {
                     CircleAvatar(
                       radius: 34.0,
                       child: Icon(
-                        Icons.compare_arrows,
+                        iconName,
                         size: 40,
                         color: Colors.white,
                       ),
@@ -214,3 +282,4 @@ class MainPage extends StatelessWidget {
     );
   }
 }
+
