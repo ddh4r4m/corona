@@ -45,20 +45,7 @@ List<Item> _buildFaq(){
   items.add(new Item(headerValue: 'Is there anything I should not do?',expandedValue: 'The following measures ARE NOT effective against COVID-2019 and can be harmful:\n-Smoking\n-Wearing multiple masks\n-Taking antibiotics (See question 10 "Are there any medicines of therapies that can prevent or cure COVID-19?"\n\nIn any case, if you have fever, cough and difficulty breathing seek medical care early to reduce the risk of developing a more severe infection and be sure to share your recent travel history with your health care provider.'));
   items.add(new Item(headerValue: 'Is the source of the coronavirus causing COVID-19 known?',expandedValue: 'Currently, the source of SARS-CoV-2, the coronavirus (CoV) causing COVID-19 is unknown. All available evidence suggests that SARS-CoV-2 has a natural animal origin and is not a constructed virus. SARS-CoV-2 virus most probably has its ecological reservoir in bats. SARS-CoV-2, belongs to a group of genetically related viruses, which also include SARS-CoV and a number of other CoVs isolated from bats populations. MERS-CoV also belongs to this group, but is less closely related.'));
   items.add(new Item(headerValue: 'How did the first human SARS-CoV-2 infections occur?',expandedValue: 'The first human cases of COVID-19 were identified in Wuhan City, China in December 2019. At this stage, it is not possible to determine precisely how humans in China were initially infected with SARS-CoV-2.\nHowever, SARS-CoV, the virus which caused the SARS outbreak in 2003, jumped from an animal reservoir (civet cats, a farmed wild animal) to humans and then spread between humans. In a similar way, it is thought that SARS-CoV-2 jumped the species barrier and initially infected humans, but more likely through an intermediate host, that is another animal species more likely to be handled by humans - this could be a domestic animal, a wild animal, or a domesticated wild animal and, as of yet, has not been identified.\nUntil the source of this virus is identified and controlled, there is a risk of reintroduction of the virus in the human population and the risk of new outbreaks like the ones we are currently experiencing.'));
-  items.add(new Item(headerValue: 'How does COVID-19 spread?',expandedValue: 'myvalue1'));
-  items.add(new Item(headerValue: 'What can I do to protect myself and prevent the spread of disease?',expandedValue: 'myvalue2'));
-  items.add(new Item(headerValue: 'How likely am I to catch COVID-19?',expandedValue: 'myvalue1'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue2'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue1'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue2'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue1'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue2'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue1'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue2'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue1'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue2'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue1'));
-  items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue2'));
+  //items.add(new Item(headerValue: 'mytext',expandedValue: 'myvalue2'));
   return items;
 }
 
@@ -93,13 +80,13 @@ List<Item> _data = _buildFaq();//generateItems(8);
         child: Column(
           children: <Widget>[
             Container(
-                margin: EdgeInsets.only(top: 20),
-                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.only(top: 25),
+                padding: EdgeInsets.fromLTRB(15,15,15,20),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'FAQs',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 1.1),
                     textAlign: TextAlign.left,
                   ),
                 )),
@@ -149,7 +136,7 @@ Widget _buildPanel() {
       return ExpansionPanel(
         headerBuilder: (BuildContext context, bool isExpanded) {
           return ListTile(
-              title: Text(item.headerValue),
+              title: Text(item.headerValue,style: TextStyle(fontWeight: FontWeight.bold),),
               onTap: () {
                 setState(() {
                   item.isExpanded = !isExpanded;
@@ -160,7 +147,7 @@ Widget _buildPanel() {
         body:Container(
             child:InkWell(
               child:  ListTile(
-                  title: Text(item.expandedValue),
+                  title: Text(item.expandedValue, style: TextStyle(fontStyle: FontStyle.italic)),
 //            subtitle: Text('To delete this panel, tap the trash can icon'),
 //            trailing: Icon(Icons.delete),
                   onTap: () {
