@@ -128,7 +128,7 @@ class _GMapState extends State<GMap> {
         child: MaterialApp(
           home: Scaffold(
             appBar: AppBar(
-              title: Text('Victim History'),
+              title: Text('Affected People'),
               backgroundColor: Colors.blue[700],
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
