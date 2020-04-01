@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:corona/pages/root_page.dart';
 //import 'package:corona/services/auth_service.dart';
 //import 'package:firebase_database/firebase_database.dart';
@@ -130,6 +131,19 @@ class _MainPageState extends State<MainPage> {
     ).toList(),
   );
 
+  Future<void> signOut() async {
+    //create an instance you your firebase auth.
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+    //return this future to the place you called it.
+    return _firebaseAuth.signOut().whenComplete(() {
+//      Navigator.pop(context);
+      Navigator.of(context).pushReplacementNamed('/LogInSignUp');
+      print("SignOut Done");
+    }).catchError((error) {
+      print("error in signout $error");
+    });
+  }
 
 
   @override
@@ -164,6 +178,7 @@ class _MainPageState extends State<MainPage> {
                         Align(
                           alignment: Alignment.topRight,
                           child: new FlatButton(
+                            onPressed: signOut,
                             child: new Text('Logout',
                                 style: new TextStyle(fontSize: 17.0, color: Colors.indigo)),
                           ),

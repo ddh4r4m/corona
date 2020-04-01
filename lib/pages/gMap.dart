@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:corona/homeScreen.dart';
 //void main() => runApp(GMap());
 
@@ -103,10 +104,15 @@ class _GMapState extends State<GMap> {
     });
   }
 
-  Future<void> addMyLocation() async{
+  Future<void> getMyUser() async{
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    print(user.email);
+  }
+
+  Future<void> addMyLocation(String email) async{
     final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     //This Update Method needs to be more secure
-    Firestore.instance.collection('markers').add({"address":"New Address","location":GeoPoint(position.latitude,position.longitude),"name":"D","placeId":"DDDff2"}).catchError((e){
+    Firestore.instance.collection('markers').add({"address":"New Address","date":DateTime.now(),"location":GeoPoint(position.latitude,position.longitude),"name":"D","placeId":"DDDff2"}).catchError((e){
       print(e);
     });
   }
@@ -115,7 +121,10 @@ class _GMapState extends State<GMap> {
     //it'll contain both latitudes and longitudes
     final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     print(position);
-    addMyLocation();
+//    getMyUser();
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+//    print(user.email);
+    addMyLocation(user.email);
 //    return position;
   }
 
