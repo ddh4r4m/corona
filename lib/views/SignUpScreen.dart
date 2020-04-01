@@ -32,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var kFontSize = 13.0;
   String _email, _password, _name,_lastName ,_warning, _errorMessage;
   bool _isLoginForm = false;
-  bool _isLoading;
+  bool _isLoading,_victim;
 
   @override
   void initState() {
@@ -236,7 +236,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (_formKey.currentState.validate()) {
       String userId = "";
       try {
-        userId = await widget.auth.signUp(_email, _password);
+        userId = await widget.auth.signUp(_email, _password,_name,_victim);
         //widget.auth.sendEmailVerification();
         //_showVerifyEmailSentDialog();
         print('Signed up user: $userId');

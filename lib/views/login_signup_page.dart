@@ -13,9 +13,12 @@ class LoginSignupPage extends StatefulWidget {
 
 class _LoginSignupPageState extends State<LoginSignupPage> {
   final _formKey = new GlobalKey<FormState>();
-
+  final TextEditingController _firstNameTextController =
+  new TextEditingController();
   String _email;
   String _password;
+  String _name;
+  bool _victim = false;
   String _errorMessage;
 
   bool _isLoginForm;
@@ -44,7 +47,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
           userId = await widget.auth.signIn(_email, _password);
           print('Signed in: $userId');
         } else {
-          userId = await widget.auth.signUp(_email, _password);
+          userId = await widget.auth.signUp(_email, _password, _name, _victim);
           //widget.auth.sendEmailVerification();
           //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');
@@ -143,8 +146,10 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             shrinkWrap: true,
             children: <Widget>[
               _isLoginForm?showLogin():showSignUp(),
+              _isLoginForm?new Text(''):showNameInput(),
               showEmailInput(),
               showPasswordInput(),
+              _isLoginForm?new Text(''):showToggle(),
               showPrimaryButton(),
               showSecondaryButton(),
               showErrorMessage(),
@@ -230,9 +235,57 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     );
   }
 
-  Widget showEmailInput() {
+  Widget showNameInput(){
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
+      child: new TextFormField(
+        maxLines: 1,
+          controller: _firstNameTextController,
+          validator: _validateFields,
+          onSaved: (value) => _name = value,
+          decoration: InputDecoration(
+            icon: new Icon(Icons.person, color: Colors.blue,),
+              labelText: "Name*",
+              hintText: "Enter your name",
+)),
+    );
+  }
+
+  String _validateFields(String text) {
+    if (text.length == 0) {
+      return "Should not be empty";
+    } else {
+      return null;
+    }
+  }
+
+  Widget showToggle(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//        padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      children: <Widget>[
+        new Padding(
+            padding: EdgeInsets.fromLTRB(40,0,0,0),
+            child: new Text(
+                'Are You affected by Covid-19',
+            )
+        ),
+
+        new Switch(
+            value: _victim,
+            onChanged: (value) {
+              setState(() {
+                _victim = value;
+                print(_victim);
+              });
+            }
+        )
+      ],);
+  }
+
+  Widget showEmailInput() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
@@ -241,7 +294,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             hintText: 'Email',
             icon: new Icon(
               Icons.mail,
-              color: Colors.grey,
+              color: Colors.blue,
             )),
         validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
         onSaved: (value) => _email = value.trim(),
@@ -260,7 +313,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             hintText: 'Password',
             icon: new Icon(
               Icons.lock,
-              color: Colors.grey,
+              color: Colors.blue,
             )),
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
         onSaved: (value) => _password = value.trim(),

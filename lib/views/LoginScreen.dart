@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var kMarginPadding = 16.0;
   var kFontSize = 13.0;
   String _email, _password, _name, _warning, _errorMessage;
+  bool _victim;
   bool _isLoginForm = true;
   bool _isLoading;
 
@@ -353,7 +354,7 @@ class _LoginScreenState extends State<LoginScreen> {
           userId = await widget.auth.signIn(_email, _password);
           print('Signed in: $userId');
         } else {
-          userId = await widget.auth.signUp(_email, _password);
+          userId = await widget.auth.signUp(_email, _password,_name,_victim);
           //widget.auth.sendEmailVerification();
           //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');

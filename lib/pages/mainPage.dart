@@ -1,4 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:corona/homeScreen.dart';
+import 'package:corona/pages/root_page.dart';
+import 'package:corona/services/authentication.dart';
+import 'package:corona/views/login_signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:corona/pages/root_page.dart';
 //import 'package:corona/services/auth_service.dart';
@@ -137,8 +141,25 @@ class _MainPageState extends State<MainPage> {
 
     //return this future to the place you called it.
     return _firebaseAuth.signOut().whenComplete(() {
+      Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
+              Animation secondaryAnimation) {
+            return RootPage(auth: new Auth());
+          }, transitionsBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation, Widget child) {
+            return new SlideTransition(
+              position: new Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            );
+          }),
+              (Route route) => false);
 //      Navigator.pop(context);
-      Navigator.of(context).pushReplacementNamed('/LogInSignUp');
+//      Navigator.of(context).pushReplacementNamed('/LogInSignUp');
+//      Navigator.popUntil(context, ModalRoute.withName('/LogInSignUp'));
       print("SignOut Done");
     }).catchError((error) {
       print("error in signout $error");
