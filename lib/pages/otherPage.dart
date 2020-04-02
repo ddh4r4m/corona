@@ -77,9 +77,11 @@ class _OtherPageState extends State<OtherPage>{
 
   void _refresh() async{
     await getData();
-    setState(() async{
-      await updateComplete();
-      updateStamp=newStr;
+    if(updateStamp==newStr){return;}
+    await updateComplete();
+    updateStamp=newStr;
+    setState((){
+
     });
   }
   Widget bodyData() => DataTable(
