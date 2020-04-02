@@ -76,14 +76,12 @@ class _OtherPageState extends State<OtherPage>{
   }
 
   void _refresh() async{
-    newStr=updateStamp;
     await getData();
-    if(newStr==updateStamp){
-      return ;
-    }
-    setState(() async{
-      await updateComplete();
-      updateStamp=newStr;
+    if(updateStamp==newStr){return;}
+    await updateComplete();
+    updateStamp=newStr;
+    setState((){
+
     });
   }
   Widget bodyData() => DataTable(
@@ -143,8 +141,8 @@ class _OtherPageState extends State<OtherPage>{
           // action button
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: () {
-              _refresh();
+            onPressed: () async{
+              await _refresh();
             },
             tooltip: "Refresh to get recent data from GOI website",
           ),
@@ -159,9 +157,8 @@ class _OtherPageState extends State<OtherPage>{
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color:BlendMode.colorBurn,
         child:Text(updateStamp),
-
+        color: Colors.lightGreen,
       ),
     );
   }
