@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
 import 'package:html/dom.dart' as dom;
 
+bool refreshRequired=true;
 class CasesReport{
   String stateName;
   int confirmedCases;
@@ -13,7 +14,7 @@ class CasesReport{
 }
 
 String updateStamp="Swipe down to refresh";
-
+String activeCases='';
 var data= <CasesReport>[
   CasesReport(stateName: 'Swipe down to refresh', confirmedCases: 0, cured: 0, death: 0),
 ];
@@ -32,6 +33,11 @@ Stream tagStream(dom.Document document, String tag) async*{
   yield element;
   }
 }
+//Stream tagStream(dom.Document document, String tag) async*{
+//  for(dom.Element element in document.getElementsByAlt(tag)){
+//    yield element;
+//  }
+//}
 List<String> states=[
   "Andhra Pradesh","Andaman and Nicobar Islands","Assam","Bihar","Chandigarh",
   "Chhattisgarh","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir",
@@ -39,6 +45,7 @@ List<String> states=[
   "Mizoram","Odisha","Puducherry","Punjab","Rajasthan","Tamil Nadu","Telengana",
   "Uttarakhand","Uttar Pradesh","West Bengal"
 ];
+
 class _OtherPageState extends State<OtherPage>{
   String newStr=updateStamp;
 
@@ -46,6 +53,9 @@ class _OtherPageState extends State<OtherPage>{
     http.Response response = await http.get('https://www.mohfw.gov.in');
     dom.Document document = parser.parse(response.body);
     List<String> myList=[];
+    await for (dom.Element element in classStream(document,'bg-blue')){
+      activeCases = element.text;
+    }
     await for (dom.Element element in tagStream(document,'td')){
       myList.add(element.text);
     }
@@ -135,11 +145,20 @@ class _OtherPageState extends State<OtherPage>{
   );
   @override
   Widget build(BuildContext context) {
-    _refresh();
+    if(refreshRequired){_refresh();refreshRequired=false;}
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text('COVID-19 Statewise Status'),
+        title: Text('Live Status'),
+        actions: <Widget>[
+          RaisedButton(
+            child: Text(
+                activeCases.split("\n")[2]+" active cases",
+                style: TextStyle(fontSize: 16),
+            ),
+          ),
+          //Container(child: Text(activeCases.split("\n")[2]+" active cases"))
+        ],
       ),
       body: new RefreshIndicator(
         child: Container(
@@ -147,7 +166,8 @@ class _OtherPageState extends State<OtherPage>{
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: bodyData()),
+                child: bodyData(),
+            ),
           ),
         ),
         onRefresh: _refresh,

@@ -869,7 +869,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("COVID-19 Contact List"),
+        title: Text("COVID-19 Helpline Contact List"),
       ),
       body: Container(
         child: SingleChildScrollView(
