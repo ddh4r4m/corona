@@ -12,10 +12,10 @@ class CasesReport{
   CasesReport({this.stateName, this.confirmedCases, this.cured, this.death});
 }
 
-String updateStamp="No Network";
+String updateStamp="Swipe down to refresh";
 
 var data= <CasesReport>[
-  CasesReport(stateName: 'No internet found', confirmedCases: 0, cured: 0, death: 0),
+  CasesReport(stateName: 'Swipe down to refresh', confirmedCases: 0, cured: 0, death: 0),
 ];
 
 class OtherPage extends StatefulWidget {
@@ -41,7 +41,8 @@ List<String> states=[
 ];
 class _OtherPageState extends State<OtherPage>{
   String newStr=updateStamp;
-  void updateComplete() async{
+
+  Future<Null> updateComplete() async{
     http.Response response = await http.get('https://www.mohfw.gov.in');
     dom.Document document = parser.parse(response.body);
     List<String> myList=[];
@@ -64,18 +65,19 @@ class _OtherPageState extends State<OtherPage>{
         }
       }
     }
+    return null;
   }
-  void getData() async{
+  Future<Null> getData() async{
     http.Response response = await http.get('https://www.mohfw.gov.in');
     dom.Document document = parser.parse(response.body);
     await for (dom.Element element in classStream(document,'status-update')){
       newStr = element.text;
-      return ;
+      return null;
     }
-    return ;
+    return null;
   }
 
-  void _refresh() async{
+  Future<Null> _refresh() async{
     await getData();
     if(updateStamp==newStr){return;}
     await updateComplete();
@@ -83,6 +85,7 @@ class _OtherPageState extends State<OtherPage>{
     setState((){
 
     });
+    return null;
   }
   Widget bodyData() => DataTable(
     columns: <DataColumn>[
@@ -137,27 +140,20 @@ class _OtherPageState extends State<OtherPage>{
     return Scaffold(
       appBar: AppBar(
         title: Text('COVID-19 Statewise Status'),
-        actions: <Widget>[
-          // action button
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () async{
-              await _refresh();
-            },
-            tooltip: "Refresh to get recent data from GOI website",
-          ),
-        ],
       ),
-      body: Container(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
+      body: new RefreshIndicator(
+        child: Container(
           child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: bodyData()),
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: bodyData()),
+          ),
         ),
+        onRefresh: _refresh,
       ),
       bottomNavigationBar: BottomAppBar(
-        child:Text(updateStamp),
+        child:Text(" COVID-19 Status\n "+updateStamp.substring(12)),
         color: Colors.lightGreen,
       ),
     );
