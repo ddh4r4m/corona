@@ -1,15 +1,21 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corona/homeScreen.dart';
 import 'package:corona/pages/root_page.dart';
 import 'package:corona/services/authentication.dart';
 import 'package:corona/views/login_signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 //import 'package:corona/pages/root_page.dart';
 //import 'package:corona/services/auth_service.dart';
 //import 'package:firebase_database/firebase_database.dart';
 //import 'package:corona/widget/provider_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geolocator/geolocator.dart';
 //import 'dart:async';
 //import 'package:corona/services/authentication.dart';
 
@@ -71,6 +77,21 @@ class _MainPageState extends State<MainPage> {
 //    }
 //  }
 //
+
+  void startServiceInPlatform() async {
+    if (Platform.isAndroid) {
+      var methodChannel = MethodChannel("com.example.corona");
+      String data = await methodChannel.invokeMethod("startService");
+      debugPrint(data);
+    }
+  }
+
+  @override
+  void initState() {
+    // implement initState
+    super.initState();
+    startServiceInPlatform();
+    }
 
   CarouselSlider getFullScreenCarousel(BuildContext mediaContext) {
     return CarouselSlider(
@@ -135,6 +156,31 @@ class _MainPageState extends State<MainPage> {
     ).toList(),
   );
 
+
+  Future<void> getMyUser() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    print(user.email);
+    addHomeLocation(user.uid);
+//    return user;
+  }
+
+  Future<void> addHomeLocation(String uid) async {
+    final position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    //This Update Method needs to be more secure
+    Firestore.instance.collection('Users').document(uid).updateData({
+      "location": GeoPoint(position.latitude, position.longitude)
+    }).catchError((e) {
+      print(e);
+    });
+    Firestore.instance.collection('Markers').document(uid).setData({
+      "location": GeoPoint(position.latitude, position.longitude),
+      "time": DateTime.now(),
+      "userid": uid,
+    });
+  }
+
+
   Future<void> signOut() async {
     //create an instance you your firebase auth.
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -189,6 +235,7 @@ class _MainPageState extends State<MainPage> {
                 child: Column(
                   children: <Widget>[
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Align(
                           alignment: Alignment.centerLeft,
@@ -197,11 +244,13 @@ class _MainPageState extends State<MainPage> {
                               textAlign: TextAlign.start),
                         ),
                         Align(
+
                           alignment: Alignment.topRight,
-                          child: new FlatButton(
+                          child: new RaisedButton(
+                            color: Colors.blue,
                             onPressed: signOut,
                             child: new Text('Logout',
-                                style: new TextStyle(fontSize: 17.0, color: Colors.indigo)),
+                                style: new TextStyle(fontSize: 17.0, color: Colors.white)),
                           ),
                         ),
 
@@ -213,6 +262,7 @@ class _MainPageState extends State<MainPage> {
                           fontWeight: FontWeight.w300, fontSize: 12),
                           textAlign: TextAlign.start),
                     ),
+
 //                    Align(
 //                      alignment: Alignment.centerRight,
 //                      child: IconButton(
@@ -245,11 +295,20 @@ class _MainPageState extends State<MainPage> {
                       crossAxisSpacing: 5.0,
                       mainAxisSpacing: 0.0),
                   children: <Widget>[
-                    _buildCard("FAQs", 20, 25,Icons.question_answer),
-                    _buildCard("News", 20, 25,Icons.speaker_notes),
+                    _buildCard("FAQs", 20, 25,Icons.question_answer,"/faqPage"),
+                    _buildCard("News", 20, 25,Icons.speaker_notes,"/newsPage"),
 //                      _buildCard("Symptoms",0,51),
 //                      _buildCard("More..",0,51)
                   ],
+                ),
+              )
+              ,Center(
+                child: RaisedButton(
+                    child: Text("Add Home Location"),
+                    onPressed: () {
+                      getMyUser();
+                    }
+
                 ),
               )
             ],
@@ -257,12 +316,15 @@ class _MainPageState extends State<MainPage> {
         ));
   }
 //  String iconName = "save";
-  Widget _buildCard(String name, double topPad, double bottomPad, IconData iconName) {
+  Widget _buildCard(String name, double topPad, double bottomPad, IconData iconName, String pageName) {
     return Padding(
       padding:
       EdgeInsets.only(top: topPad, bottom: bottomPad, left: 5, right: 5),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, pageName);
+//          Navigator.of(context).pushReplacementNamed(pageName);
+        },
         child: Container(
 //          width: 60,
 //          height: 130,

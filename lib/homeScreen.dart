@@ -1,10 +1,11 @@
 //import 'package:carousel_slider/carousel_slider.dart';
+import 'package:corona/pages/userPage.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:corona/pages/otherPage.dart';
 import 'package:corona/pages/mainPage.dart';
-import 'package:corona/pages/gMap.dart';
+//import 'package:corona/pages/gMap.dart';
 import 'package:corona/pages/faqPage.dart';
 import 'package:corona/pages/newgMap.dart';
 import 'package:corona/services/authentication.dart';
@@ -32,8 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final OtherPage _otherPage = OtherPage();
   final MainPage _mainPage = MainPage();
   final faqPage _faqPage = faqPage();
-   final NewGMapPage _gMapPage = NewGMapPage();
+//   final PlaceMarkerPage _gMapPage = PlaceMarkerPage();
   final ProfilePage _profilePage = ProfilePage();
+  final UserPage _userPage = UserPage();
 
   Widget _showPage = new MainPage();
 
@@ -53,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return _otherPage;
         break;
       case 4:
-        return GMap();
+        return _userPage;
         break;
       default:
         return new Container(
@@ -78,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.map),
+        child: Icon(Icons.pin_drop),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return GMap();
@@ -92,26 +94,27 @@ class _HomeScreenState extends State<HomeScreen> {
         items: <Widget>[
 
           Icon(
-            Icons.account_circle,
+            Icons.call,
             size: 20,
             color: Colors.indigo,
           ),
           Icon(Icons.question_answer, size: 20, color: Colors.indigo,),
           Icon(Icons.home, size: 20, color: Colors.indigo),
           Icon(Icons.playlist_add_check, size: 20, color: Colors.indigo),
-          Icon(Icons.map, size: 20, color: Colors.indigo)
+          Icon(Icons.person, size: 20, color: Colors.indigo)
         ],
         index: 2,
         onTap: (index) {
           setState(() {
 //            pageIndex = index;
-            if (index != 4) {
+//            if (index != 4) {
               _showPage = _pageChooser(index);
-            } else {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return GMap();
-              }));
-            }
+//            }
+//            else {
+//              Navigator.push(context, MaterialPageRoute(builder: (context) {
+//                return GMap();
+//              }));
+//            }
           });
         },
       ), floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:corona/pages/faqPage.dart';
+import 'package:corona/pages/otherPage.dart';
 import 'package:corona/views/login_signup_page.dart';
 //import 'package:corona/widget/provider_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,7 +25,9 @@ class MyApp extends StatelessWidget {
 //            '/SignUp': (BuildContext context) => new SignUpScreen(),
 //            '/LogIn': (BuildContext context) => new LoginScreen(),
               '/LogInSignUp': (BuildContext context) => new LoginSignupPage(),
-              '/HomeScreen': (BuildContext context) => new HomeScreen()
+              '/HomeScreen': (BuildContext context) => new HomeScreen(),
+              '/faqPage': (BuildContext context) => new faqPage(),
+              '/newsPage': (BuildContext context) => new OtherPage(),
           },
         );
   }
