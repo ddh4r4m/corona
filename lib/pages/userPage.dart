@@ -10,7 +10,14 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   String userName = '  ';
+  String _name = "";
+  final _formKey = new GlobalKey<FormState>();
+  final TextEditingController _firstNameTextController =
+      new TextEditingController();
   bool _victim = false;
+  String _errorMessage;
+  bool _isLoginForm;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -19,6 +26,50 @@ class _UserPageState extends State<UserPage> {
     getCurrentUser();
   }
 
+  String _validateFields(String text) {
+    if (text.length == 0) {
+      return "Should not be empty";
+    } else {
+      return null;
+    }
+  }
+
+  bool validateAndSave() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
+
+  void validateAndSubmit() async {
+    setState(() {
+      _errorMessage = "";
+      _isLoading = true;
+    });
+    if (validateAndSave()) {
+      String userId = "";
+      try {
+        FirebaseUser user = await FirebaseAuth.instance.currentUser();
+        Firestore.instance.collection('Users').document(user.uid).updateData({
+          "name": _name,
+          "victim": _victim,
+//          "DateCreated": new DateTime.now()
+        });
+        setState(() {
+          _isLoading = false;
+          userName = _name;
+        });
+      } catch (e) {
+        print('Error: $e');
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.message;
+        });
+      }
+    }
+  }
 
   Future<void> getMyUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -43,7 +94,6 @@ class _UserPageState extends State<UserPage> {
     });
   }
 
-
   getCurrentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     DocumentReference userData = await Firestore.instance
@@ -66,9 +116,9 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return SingleChildScrollView(
+      child: Column(
       children: <Widget>[
-        SizedBox(height: 60),
         CircleAvatar(
           minRadius: 50,
           backgroundColor: Colors.blue,
@@ -98,10 +148,10 @@ class _UserPageState extends State<UserPage> {
                 padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
                 child: new Text(
                   'Are You affected by Covid-19',
-                  style: TextStyle(color: _victim?Colors.red:Colors.green),
+                  style: TextStyle(color: _victim ? Colors.red : Colors.green),
                 )),
             new Switch(
-              activeColor: Colors.red,
+                activeColor: Colors.red,
                 inactiveTrackColor: Colors.green,
                 value: _victim,
                 onChanged: (value) {
@@ -111,18 +161,77 @@ class _UserPageState extends State<UserPage> {
                 })
           ],
         ),
-        Center(
-          child: RaisedButton(
-            color: Colors.blue[400],
-              splashColor: Colors.lightBlueAccent,
-              child: Text("Add Home Location", style: TextStyle(color: Colors.blue[900]),),
-              onPressed: () {
-                getMyUser();
-              }
-
+        new Form(
+          key: _formKey,
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[showNameInput(), _showCircularProgress()],
           ),
-        )
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RaisedButton(
+                  color: Colors.blue[400],
+                  splashColor: Colors.lightBlueAccent,
+                  child: Text(
+                    "Add Home Location",
+                    style: TextStyle(color: Colors.blue[900]),
+                  ),
+                  onPressed: () {
+                    getMyUser();
+                  }),
+            )
+            ,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RaisedButton(
+                  color: Colors.blue[400],
+                  splashColor: Colors.lightBlueAccent,
+                  child: Text(
+                    "Change Data",
+                    style: TextStyle(color: Colors.blue[900]),
+                  ),
+                  onPressed: () {
+                    validateAndSubmit();
+                  }),
+            )
+          ],
+
+        ),
+
       ],
+    ));
+  }
+
+  Widget _showCircularProgress() {
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    return Container(
+      height: 0.0,
+      width: 0.0,
+    );
+  }
+
+  Widget showNameInput() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(15.0, 0.0, 35.0, 0.0),
+      child: new TextFormField(
+          maxLines: 1,
+          controller: _firstNameTextController,
+          validator: _validateFields,
+          onSaved: (value) => _name = value,
+          decoration: InputDecoration(
+            icon: new Icon(
+              Icons.person,
+              color: Colors.blue,
+            ),
+            labelText: "Name*",
+            hintText: "Enter your name",
+          )),
     );
   }
 }
