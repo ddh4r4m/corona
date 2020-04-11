@@ -32,6 +32,7 @@ class _GMapState extends State<GMap> {
   Set<Marker> _markers = Set<Marker>();
   Set<Circle> _circles = Set<Circle>();
   List<Marker> allMarkers = [];
+  String userId;
 
   setMarkers(){
     return allMarkers;
@@ -41,6 +42,9 @@ class _GMapState extends State<GMap> {
 
   void getCurrentLocation() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    setState(() {
+      userId = user.uid;
+    });
     DocumentReference userData = await Firestore.instance
         .collection("Users")
         .document(user.uid.toString());
@@ -99,18 +103,18 @@ class _GMapState extends State<GMap> {
 
           });
 //          Firestore.instance.collection('Markers').document(user.uid).delete();
-              print(_markers.length);
-              print(_markers);
+              // print(_markers.length);
+              // print(_markers);
 //          mapController.
 //          _markers.remove(_markers.firstWhere((Marker marker) => marker.markerId.value == user.uid));
 //          _markers.removeAll();
-              print(_markers.length);
-              print(_markers);
+              // print(_markers.length);
+              // print(_markers);
 //          print(_markers);
 
               Firestore.instance.collection('Markers').document(user.uid).setData({
                 "location": GeoPoint(newLocalData.latitude, newLocalData.longitude),
-//            "time": DateTime.now(),
+                "time": DateTime.now(),
                 "userid": user.uid,
                 "victim": victimOrNot
               });
@@ -144,9 +148,16 @@ class _GMapState extends State<GMap> {
   void initState() {
     // implement initState
     super.initState();
+    FirebaseAuth.instance.currentUser().then(
+      (user)=>    setState(() {
+      userId = user.uid;
+    })
+    );
     _setCircles();
     _myMarkers = Firestore.instance.collection('markers').snapshots();
 //    print(_myMarkers);
+    getCurrentLocation();
+    _getCurrentLocation();
     Geolocator().getCurrentPosition().then((currloc) {
 //      mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
 //        target: LatLng(currloc.latitude,currloc.longitude),
@@ -297,9 +308,8 @@ class _GMapState extends State<GMap> {
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(position.latitude, position.longitude),
         zoom: 14,
-        bearing: 90,
-        tilt: 45)));
-    print(position);
+        )));
+    // print(position);
 //    getMyUser();
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
 //    print(user.email);
@@ -398,8 +408,8 @@ class _GMapState extends State<GMap> {
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.location_searching),
               onPressed: () {
-//                _getCurrentLocation();
-                getCurrentLocation();
+               _getCurrentLocation();
+                // getCurrentLocation();
 //                getMyUser();
               },
             ),
@@ -444,6 +454,28 @@ class _GMapState extends State<GMap> {
         _markers.clear(); //remove all the markers
         _circles.clear();
         for(int i=0;i<snapshot.data.documents.length;i++){
+          if(snapshot.data.documents[i]['userid']==userId){
+             _markers.add(Marker(
+                  markerId: MarkerId(snapshot.data.documents[i]['userid']),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(_greenHue),
+                  position: LatLng(
+                    snapshot.data.documents[i]['location'].latitude,
+                    snapshot.data.documents[i]['location'].longitude,
+                  ),
+//                  infoWindow: InfoWindow(
+//                    title: snapshot.data.documents[i]['name'],
+//                    snippet: snapshot.data.documents[i]['address'],
+//                  )
+                  )
+          );
+          _circles.add(Circle(
+              circleId: CircleId(snapshot.data.documents[i]['userid']),
+              center: LatLng(snapshot.data.documents[i]['location'].latitude,
+                  snapshot.data.documents[i]['location'].longitude),
+              radius: 400,
+              strokeWidth: 0,
+              fillColor: Color.fromRGBO(50,205,50, 0.3)));
+          }else if(snapshot.data.documents[i]['victim']){
           _markers.add(Marker(
                   markerId: MarkerId(snapshot.data.documents[i]['userid']),
                   icon: BitmapDescriptor.defaultMarkerWithHue(_pinkHue),
@@ -464,8 +496,10 @@ class _GMapState extends State<GMap> {
               radius: 400,
               strokeWidth: 0,
               fillColor: Color.fromRGBO(255, 94,10, 0.3)));
+          }
         }
         return GoogleMap(
+          onMapCreated: _onMapCreated,
           markers: _markers,
           circles: _circles,
           initialCameraPosition: CameraPosition(
@@ -499,6 +533,7 @@ class _GMapState extends State<GMap> {
 }
 
 const _pinkHue = 220.0;
+const _greenHue = 350.0;
 
 class victimsMap extends StatelessWidget {
   const victimsMap({

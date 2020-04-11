@@ -10,13 +10,12 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   String userName = '  ';
-  String _name = "";
+  String _email = "";
   final _formKey = new GlobalKey<FormState>();
   final TextEditingController _firstNameTextController =
       new TextEditingController();
   bool _victim = false;
   String _errorMessage;
-  bool _isLoginForm;
   bool _isLoading = false;
 
   @override
@@ -53,13 +52,13 @@ class _UserPageState extends State<UserPage> {
       try {
         FirebaseUser user = await FirebaseAuth.instance.currentUser();
         Firestore.instance.collection('Users').document(user.uid).updateData({
-          "name": _name,
+          "name": userName,
           "victim": _victim,
 //          "DateCreated": new DateTime.now()
         });
         setState(() {
           _isLoading = false;
-          userName = _name;
+          userName = userName;
         });
       } catch (e) {
         print('Error: $e');
@@ -107,6 +106,7 @@ class _UserPageState extends State<UserPage> {
           setState(() {
             userName = datasnapshot.data["name"];
             _victim = datasnapshot.data["victim"];
+            _email = datasnapshot.data["email"];
           });
         }
       }
@@ -131,7 +131,7 @@ class _UserPageState extends State<UserPage> {
         SizedBox(height: 20),
         Align(
           alignment: Alignment.center,
-          child: userName != ""
+          child: userName != "  "
               ? Text('Hey!! ' + userName,
                   style: TextStyle(
                       fontWeight: FontWeight.w900,
@@ -159,6 +159,23 @@ class _UserPageState extends State<UserPage> {
                     _victim = value;
                   });
                 })
+          ],
+        ),Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//        padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+          children: <Widget>[
+            new Padding(
+                padding: EdgeInsets.all(25.0),
+                child: new Text(
+                  'Email Id: ',
+                  style: TextStyle(color:Colors.blue),
+                )),
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Text( _email,
+                    style: TextStyle(color: Colors.blue),
+                  ),
+            )
           ],
         ),
         new Form(
@@ -223,7 +240,7 @@ class _UserPageState extends State<UserPage> {
           maxLines: 1,
           controller: _firstNameTextController,
           validator: _validateFields,
-          onSaved: (value) => _name = value,
+          onSaved: (value) => userName = value,
           decoration: InputDecoration(
             icon: new Icon(
               Icons.person,

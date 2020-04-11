@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:io';
-
+import 'package:location/location.dart' as LocaTion;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:corona/homeScreen.dart';
+// import 'package:corona/homeScreen.dart';
 import 'package:corona/pages/root_page.dart';
 import 'package:corona/services/authentication.dart';
-import 'package:corona/views/login_signup_page.dart';
+// import 'package:corona/views/login_signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 //import 'package:corona/pages/root_page.dart';
@@ -77,6 +78,9 @@ class _MainPageState extends State<MainPage> {
 //    }
 //  }
 //
+  bool victimOrNot = false;
+  StreamSubscription _locationSubscription;
+  LocaTion.Location _locationTracker = LocaTion.Location();
 
   void startServiceInPlatform() async {
     if (Platform.isAndroid) {
@@ -91,6 +95,7 @@ class _MainPageState extends State<MainPage> {
     // implement initState
     super.initState();
     startServiceInPlatform();
+    getCurrentLocation();
     }
 
   CarouselSlider getFullScreenCarousel(BuildContext mediaContext) {
@@ -157,28 +162,68 @@ class _MainPageState extends State<MainPage> {
   );
 
 
-  Future<void> getMyUser() async {
+
+  void getCurrentLocation() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    print(user.email);
-    addHomeLocation(user.uid);
-//    return user;
+    DocumentReference userData = await Firestore.instance.collection("Users").document(user.uid.toString());
+    userData.get().then((datasnapshot) {
+      if (datasnapshot.exists) {
+        if (datasnapshot.data["victim"] != null) {
+          victimOrNot = datasnapshot.data["victim"];
+        }
+      } else {
+        print("No such user");
+      }
+    });
+    // QuerySnapshot homeLocn = await Firestore.instance.collection("Users").getDocuments();
+    try {
+      // var location = await _locationTracker.getLocation();
+      if (_locationSubscription != null) {
+        _locationSubscription.cancel();
+      }
+      _locationSubscription =
+          _locationTracker.onLocationChanged().listen((newLocalData) {
+            if (victimOrNot) {
+              Firestore.instance.collection('Markers').document(user.uid).updateData({
+                "location": GeoPoint(newLocalData.latitude, newLocalData.longitude),
+                "time": DateTime.now(),
+                "userid": user.uid,
+                "victim":victimOrNot
+              });
+            }
+            print(newLocalData);
+          });
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        debugPrint("Permission Denied");
+      }
+    }
   }
 
-  Future<void> addHomeLocation(String uid) async {
-    final position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    //This Update Method needs to be more secure
-    Firestore.instance.collection('Users').document(uid).updateData({
-      "location": GeoPoint(position.latitude, position.longitude)
-    }).catchError((e) {
-      print(e);
-    });
-    Firestore.instance.collection('Markers').document(uid).setData({
-      "location": GeoPoint(position.latitude, position.longitude),
-      "time": DateTime.now(),
-      "userid": uid,
-    });
-  }
+
+
+//   Future<void> getMyUser() async {
+//     FirebaseUser user = await FirebaseAuth.instance.currentUser();
+//     print(user.email);
+//     addHomeLocation(user.uid);
+// //    return user;
+//   }
+
+//   Future<void> addHomeLocation(String uid) async {
+//     final position = await Geolocator()
+//         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+//     //This Update Method needs to be more secure
+//     Firestore.instance.collection('Users').document(uid).updateData({
+//       "location": GeoPoint(position.latitude, position.longitude)
+//     }).catchError((e) {
+//       print(e);
+//     });
+//     Firestore.instance.collection('Markers').document(uid).setData({
+//       "location": GeoPoint(position.latitude, position.longitude),
+//       "time": DateTime.now(),
+//       "userid": uid,
+//     });
+//   }
 
 
   Future<void> signOut() async {
@@ -300,15 +345,6 @@ class _MainPageState extends State<MainPage> {
 //                      _buildCard("Symptoms",0,51),
 //                      _buildCard("More..",0,51)
                   ],
-                ),
-              )
-              ,Center(
-                child: RaisedButton(
-                    child: Text("Add Home Location"),
-                    onPressed: () {
-                      getMyUser();
-                    }
-
                 ),
               )
             ],
