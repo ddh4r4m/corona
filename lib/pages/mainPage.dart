@@ -341,7 +341,7 @@ class _MainPageState extends State<MainPage> {
                       mainAxisSpacing: 0.0),
                   children: <Widget>[
                     _buildCard("FAQs", 20, 25,Icons.question_answer,"/faqPage"),
-                    _buildCard("News", 20, 25,Icons.speaker_notes,"/newsPage"),
+                    _buildCard("Current Status", 20, 25,Icons.speaker_notes,"/newsPage"),
 //                      _buildCard("Symptoms",0,51),
 //                      _buildCard("More..",0,51)
                   ],

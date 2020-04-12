@@ -27,7 +27,7 @@ class OnBoarding extends StatelessWidget {
             )),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('If one of the users of this app is tested corona positive, we retrive the users location and then show his movements on the map so that you can avoid going nearby',
+          child: Text('We keep you safe and healthy by displaying the locations of infected users near you',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w300,
@@ -49,7 +49,28 @@ class OnBoarding extends StatelessWidget {
             )),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('Everytime you come to Our app blah blah blah',
+          child: Text('We have got a live tracker page to help you track the number of active COVID-19 cases issued by government of India',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                color: grey,
+                fontSize: 18.0,
+              )),
+        ),
+        iconAssetPath: 'images/circle.png'
+    ),
+    PageModel(
+        color: white,
+        heroAssetPath: 'images/q.png',
+        title: Text('More Info',
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              color: primary,
+              fontSize: 34.0,
+            )),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('Got an emergency and need to contact the government assigned state healthcare centre? We have a one click contact list for your convinience',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w300,
@@ -71,7 +92,7 @@ class OnBoarding extends StatelessWidget {
             )),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('We ask the infected users their permission to share their location to use the Corona app, so that others can Stay Safe.',
+          child: Text('We take permission of an infected user before sharing their location anonymously. So that millions of others can be safe.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w300,
