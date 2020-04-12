@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
@@ -14,10 +16,12 @@ abstract class BaseAuth {
   Future<void> signOut();
 
   Future<bool> isEmailVerified();
+    
 }
 
 class Auth implements BaseAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  bool firstOpen=false;
 
   Future<String> signIn(String email, String password, ) async {
     AuthResult result = await _firebaseAuth.signInWithEmailAndPassword(
@@ -59,4 +63,5 @@ class Auth implements BaseAuth {
     FirebaseUser user = await _firebaseAuth.currentUser();
     return user.isEmailVerified;
   }
+
 }

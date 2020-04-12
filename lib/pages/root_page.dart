@@ -1,12 +1,15 @@
 import 'package:corona/views/login_signup_page.dart';
+import 'package:corona/views/on_boarding.dart';
 import 'package:flutter/material.dart';
 import 'package:corona/services/authentication.dart';
 import 'package:corona/homeScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthStatus {
   NOT_DETERMINED,
   NOT_LOGGED_IN,
   LOGGED_IN,
+  FIRST_OPEN,
 }
 
 class RootPage extends StatefulWidget {
@@ -33,8 +36,31 @@ class _RootPageState extends State<RootPage> {
         authStatus =
         user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
+      
+    });
+    getBoolValuesSF().then((bVal){
+      setState(() {
+        if(bVal){
+        authStatus = AuthStatus.FIRST_OPEN;
+        addBoolToSF();
+        }
+      });
     });
   }
+
+  
+  addBoolToSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('firstOpen', false);
+  }
+
+  getBoolValuesSF() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  //Return bool
+  bool boolValue = prefs.getBool('firstOpen') ?? true;
+  // addBoolToSF();
+  return boolValue;
+}
 
   void loginCallback() {
     widget.auth.getCurrentUser().then((user) {
@@ -66,6 +92,9 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     switch (authStatus) {
+      case AuthStatus.FIRST_OPEN:
+        return OnBoarding();
+        break;
       case AuthStatus.NOT_DETERMINED:
         return buildWaitingScreen();
         break;
