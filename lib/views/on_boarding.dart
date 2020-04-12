@@ -1,3 +1,5 @@
+import 'package:corona/pages/root_page.dart';
+import 'package:corona/services/authentication.dart';
 import 'package:corona/views/login_signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
@@ -92,9 +94,11 @@ class OnBoarding extends StatelessWidget {
             doneButtonText: "Done",
             pageList: pageList,
             onDoneButtonPressed: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginSignupPage())),
+                // Navigator.pushReplacementNamed(context, "/LogInSignUp"),
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>RootPage(auth: new Auth()))),
             onSkipButtonPressed: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginSignupPage())),
+                // Navigator.pushReplacementNamed(context, "/LogInSignUp"),
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>RootPage(auth: new Auth()))),
           ),
           Positioned.fill(
             bottom: 10,
