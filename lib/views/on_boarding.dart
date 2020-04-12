@@ -1,3 +1,5 @@
+import 'package:corona/pages/root_page.dart';
+import 'package:corona/services/authentication.dart';
 import 'package:corona/views/login_signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
@@ -39,7 +41,7 @@ class OnBoarding extends StatelessWidget {
     PageModel(
         color: white,
         heroAssetPath: 'images/q.png',
-        title: Text('Close contact',
+        title: Text('More Info',
             style: TextStyle(
               fontWeight: FontWeight.w800,
               color: primary,
@@ -47,7 +49,7 @@ class OnBoarding extends StatelessWidget {
             )),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('Everytime you come to close contact with another users, those cases will be safely stored in our database!',
+          child: Text('Everytime you come to Our app blah blah blah',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w300,
@@ -92,9 +94,11 @@ class OnBoarding extends StatelessWidget {
             doneButtonText: "Done",
             pageList: pageList,
             onDoneButtonPressed: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginSignupPage())),
+                // Navigator.pushReplacementNamed(context, "/LogInSignUp"),
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>RootPage(auth: new Auth()))),
             onSkipButtonPressed: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginSignupPage())),
+                // Navigator.pushReplacementNamed(context, "/LogInSignUp"),
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>RootPage(auth: new Auth()))),
           ),
           Positioned.fill(
             bottom: 10,
