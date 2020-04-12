@@ -41,7 +41,7 @@ class OnBoarding extends StatelessWidget {
     PageModel(
         color: white,
         heroAssetPath: 'images/q.png',
-        title: Text('Close contact',
+        title: Text('More Info',
             style: TextStyle(
               fontWeight: FontWeight.w800,
               color: primary,
@@ -49,7 +49,7 @@ class OnBoarding extends StatelessWidget {
             )),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('Everytime you come to close contact with another users, those cases will be safely stored in our database!',
+          child: Text('Everytime you come to Our app blah blah blah',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w300,
