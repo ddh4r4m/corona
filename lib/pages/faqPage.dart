@@ -75,25 +75,27 @@ List<Item> _data = _buildFaq();//generateItems(8);
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            Container(
-                margin: EdgeInsets.only(top: 25),
-                padding: EdgeInsets.fromLTRB(15,15,15,20),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'FAQs',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 1.1),
-                    textAlign: TextAlign.left,
-                  ),
-                )),
-            _buildPanel()
-          ],
-        ),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.only(top: 25),
+                  padding: EdgeInsets.fromLTRB(15,15,15,20),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'FAQs',
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, letterSpacing: 1.1),
+                      textAlign: TextAlign.left,
+                    ),
+                  )),
+              _buildPanel()
+            ],
+          ),
 //        child: _buildPanel(),
+        ),
       ),
     );
   }
