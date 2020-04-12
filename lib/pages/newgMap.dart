@@ -174,29 +174,29 @@ class _GMapState extends State<GMap> {
     });
   }
 
-  _addMarker(){
-    setState(() {
-      _markers.add(Marker(
-        markerId: MarkerId("newma"),
-        icon: BitmapDescriptor.defaultMarkerWithHue(_pinkHue),
-        position: LatLng(28.9041, 77.1025),
-//                  infoWindow: InfoWindow(
-//                    title: snapshot.data.documents[i]['name'],
-//                    snippet: snapshot.data.documents[i]['address'],
-//                  )
-      )
-      );
-    });
-  }
+//   _addMarker(){
+//     setState(() {
+//       _markers.add(Marker(
+//         markerId: MarkerId("newma"),
+//         icon: BitmapDescriptor.defaultMarkerWithHue(_pinkHue),
+//         position: LatLng(28.9041, 77.1025),
+// //                  infoWindow: InfoWindow(
+// //                    title: snapshot.data.documents[i]['name'],
+// //                    snippet: snapshot.data.documents[i]['address'],
+// //                  )
+//       )
+//       );
+//     });
+//   }
 
-  _deleteMarker(){
-    setState(() {
-      _markers.removeWhere((m)=>m.markerId.value == 'newma');
-//      Firestore.instance.collection('Markers').document(uid).delete();
-//      _markers = _markers;
+//   _deleteMarker(){
+//     setState(() {
+//       _markers.removeWhere((m)=>m.markerId.value == 'newma');
+// //      Firestore.instance.collection('Markers').document(uid).delete();
+// //      _markers = _markers;
 
-    });
-  }
+//     });
+//   }
 
   populateClients() {
     clients = [];
@@ -454,6 +454,7 @@ class _GMapState extends State<GMap> {
         _markers.clear(); //remove all the markers
         _circles.clear();
         for(int i=0;i<snapshot.data.documents.length;i++){
+          if(userId!=null && snapshot.data.documents[i]['userid']!=null){
           if(snapshot.data.documents[i]['userid']==userId){
              _markers.add(Marker(
                   markerId: MarkerId(snapshot.data.documents[i]['userid']),
@@ -496,6 +497,8 @@ class _GMapState extends State<GMap> {
               radius: 400,
               strokeWidth: 0,
               fillColor: Color.fromRGBO(255, 94,10, 0.3)));
+          }
+
           }
         }
         return GoogleMap(

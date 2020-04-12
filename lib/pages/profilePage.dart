@@ -155,30 +155,30 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
 
-//where("userid",isEqualTo: uid)
-Widget _buildBody(BuildContext context) {
-  return StreamBuilder<QuerySnapshot>(
-    stream: Firestore.instance.collection('Markers').snapshots(),
-    builder: (context, snapshot) {
-      if (!snapshot.hasData) return LinearProgressIndicator();
-      return _buildList(context, snapshot.data.documents);
-      return new ListView(
-        children: snapshot.data.documents.map((documents){
-          if(documents["userid"]!=uid){
-            return new ListTile(
-              title: new Text(documents["userid"].toString()),
-            );
-          }else{
-            return new ListTile(
-              title: new Text("documents[].toString()"),
-            );
-          }
+// //where("userid",isEqualTo: uid)
+// Widget _buildBody(BuildContext context) {
+//   return StreamBuilder<QuerySnapshot>(
+//     stream: Firestore.instance.collection('Markers').snapshots(),
+//     builder: (context, snapshot) {
+//       if (!snapshot.hasData) return LinearProgressIndicator();
+//       return _buildList(context, snapshot.data.documents);
+//       return new ListView(
+//         children: snapshot.data.documents.map((documents){
+//           if(documents["userid"]!=uid){
+//             return new ListTile(
+//               title: new Text(documents["userid"].toString()),
+//             );
+//           }else{
+//             return new ListTile(
+//               title: new Text("documents[].toString()"),
+//             );
+//           }
 
-        }).toList(),
-      );
-      });
-//      return _buildList(context, snapshot.data.documents);
-    }
+//         }).toList(),
+//       );
+//       });
+// //      return _buildList(context, snapshot.data.documents);
+//     }
 //
 //List<Record> applyFilter(
 //  String filter, List<Record> records
