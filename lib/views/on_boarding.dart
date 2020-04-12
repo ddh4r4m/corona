@@ -1,6 +1,6 @@
 import 'package:corona/pages/root_page.dart';
 import 'package:corona/services/authentication.dart';
-import 'package:corona/views/login_signup_page.dart';
+// import 'package:corona/views/login_signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
 
@@ -61,8 +61,8 @@ class OnBoarding extends StatelessWidget {
     ),
     PageModel(
         color: white,
-        heroAssetPath: 'images/q.png',
-        title: Text('More Info',
+        heroAssetPath: 'images/care.png',
+        title: Text('Healthcare Centre',
             style: TextStyle(
               fontWeight: FontWeight.w800,
               color: primary,
@@ -70,7 +70,7 @@ class OnBoarding extends StatelessWidget {
             )),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('Got an emergency and need to contact the government assigned state healthcare centre? We have a one click contact list for your convinience',
+          child: Text('Got an emergency and need to contact the government assigned state healthcare centre? We have a one click contact list for your convenience',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w300,
