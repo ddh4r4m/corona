@@ -147,7 +147,7 @@ class _UserPageState extends State<UserPage> {
             new Padding(
                 padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
                 child: new Text(
-                  'Are You affected by Covid-19',
+                  'Are You Showing Symptoms of Covid-19',
                   style: TextStyle(color: _victim ? Colors.red : Colors.green),
                 )),
             new Switch(

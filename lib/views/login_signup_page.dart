@@ -269,7 +269,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
         new Padding(
             padding: EdgeInsets.fromLTRB(40,0,0,0),
             child: new Text(
-                'Are You affected by Covid-19',
+                'Are You Showing Symptoms of Covid-19',
             )
         ),
 
